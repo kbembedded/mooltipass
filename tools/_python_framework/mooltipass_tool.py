@@ -135,10 +135,14 @@ def main():
 
 		# Generate a mass production file 
 		if sys.argv[1] == "generate_mass_prod_file":
-			if len(sys.argv) == (2 + 2):
+			if len(sys.argv) == 4:
 				# Only firmware hex + bootloader hex are passed as args: 0s for aes keys and uids
 				print "Generating blank mass production file with 0s for AES keys and UID"
 				generateFlashAndEepromHex(sys.argv[2], sys.argv[3], 12345, [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0], "newflash.hex", "neweeprom.hex", True)
+			elif len(sys.argv) == 5:
+				# firmware hex, bootloader hex, and serial are passed as args: 0s for aes keys and uids
+				print "Generating blank mass production file with 0s for AES keys and UID"
+				generateFlashAndEepromHex(sys.argv[2], sys.argv[3], int(sys.argv[4]), [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0], "newflash.hex", "neweeprom.hex", True)
 				
 		if sys.argv[1] == "get_serial":
 			if version_data[2] == "mini":
