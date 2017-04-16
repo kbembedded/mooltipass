@@ -252,6 +252,7 @@ mooltipass.device.addCredentials = function(callback, tab, username, password, u
  * @param url
  */
 mooltipass.device.updateCredentials = function(callback, tab, entryId, username, password, url) {
+    if (background_debug_msg > 2) mpDebug.log('%c device: updateCredentials ', mpDebug.css('e244ff') , 'Userame:' + username + ' / Password:' + password );
     //TODO: Trigger unlock if device is connected but locked
     // Check that the Mooltipass is unlocked
     if(!event.isMooltipassUnlocked()) {
@@ -268,6 +269,9 @@ mooltipass.device.updateCredentials = function(callback, tab, entryId, username,
 
     // unset error message
     page.tabs[tab.id].errorMessage = null;
+
+    if ( typeof username === 'object') username = username[0];
+    if ( typeof password === 'object') password = password[0];
 
     request = {update: {context: url, login: username, password: password}};
 
@@ -482,16 +486,7 @@ mooltipass.device.messageListener = function(message, sender, sendResponse) {
                 if ((mooltipass.device.wasPreviouslyUnlocked == false) && (mooltipass.device.retrieveCredentialsQueue.length > 0))
                 {
                     //console.log('sending to ' + mooltipass.device._app.id);
-                    if (moolticute.connectedToDaemon) {
-                        moolticute.askPassword({
-                            'reqid': mooltipass.device.retrieveCredentialsQueue[0].reqid, 
-                            'domain': mooltipass.device.retrieveCredentialsQueue[0].domain, 
-                            'subdomain': mooltipass.device.retrieveCredentialsQueue[0].subdomain
-                        });
-                    } else {
-                        chrome.runtime.sendMessage(mooltipass.device._app.id, {'getInputs' : {'reqid': mooltipass.device.retrieveCredentialsQueue[0].reqid, 'domain': mooltipass.device.retrieveCredentialsQueue[0].domain, 'subdomain': mooltipass.device.retrieveCredentialsQueue[0].subdomain}});        
-                    }
-                    
+                    chrome.runtime.sendMessage(mooltipass.device._app.id, {'getInputs' : {'reqid': mooltipass.device.retrieveCredentialsQueue[0].reqid, 'domain': mooltipass.device.retrieveCredentialsQueue[0].domain, 'subdomain': mooltipass.device.retrieveCredentialsQueue[0].subdomain}});
                 }                
                 mooltipass.device.wasPreviouslyUnlocked = true;
             }            
@@ -532,16 +527,7 @@ mooltipass.device.messageListener = function(message, sender, sendResponse) {
         if(mooltipass.device.retrieveCredentialsQueue.length > 0)
         {
             //console.log('sending to ' + mooltipass.device._app.id);
-            if (moolticute.connectedToDaemon) {
-                moolticute.askPassword({
-                    'reqid': mooltipass.device.retrieveCredentialsQueue[0].reqid, 
-                    'domain': mooltipass.device.retrieveCredentialsQueue[0].domain, 
-                    'subdomain': mooltipass.device.retrieveCredentialsQueue[0].subdomain
-                });
-            } else {
-                chrome.runtime.sendMessage(mooltipass.device._app.id, {'getInputs' : {'reqid': mooltipass.device.retrieveCredentialsQueue[0].reqid, 'domain': mooltipass.device.retrieveCredentialsQueue[0].domain, 'subdomain': mooltipass.device.retrieveCredentialsQueue[0].subdomain}});       
-            }
-            
+            chrome.runtime.sendMessage(mooltipass.device._app.id, {'getInputs' : {'reqid': mooltipass.device.retrieveCredentialsQueue[0].reqid, 'domain': mooltipass.device.retrieveCredentialsQueue[0].domain, 'subdomain': mooltipass.device.retrieveCredentialsQueue[0].subdomain}});
         }
     }
     // Returned on requesting credentials for a specific URL, but no credentials were found
@@ -559,15 +545,7 @@ mooltipass.device.messageListener = function(message, sender, sendResponse) {
         if(mooltipass.device.retrieveCredentialsQueue.length > 0)
         {
             //console.log('sending to ' + mooltipass.device._app.id);
-            if (moolticute.connectedToDaemon) {
-                moolticute.askPassword({
-                    'reqid': mooltipass.device.retrieveCredentialsQueue[0].reqid, 
-                    'domain': mooltipass.device.retrieveCredentialsQueue[0].domain, 
-                    'subdomain': mooltipass.device.retrieveCredentialsQueue[0].subdomain
-                });
-            } else {
-                chrome.runtime.sendMessage(mooltipass.device._app.id, {'getInputs' : {'reqid': mooltipass.device.retrieveCredentialsQueue[0].reqid, 'domain': mooltipass.device.retrieveCredentialsQueue[0].domain, 'subdomain': mooltipass.device.retrieveCredentialsQueue[0].subdomain}});   
-            }
+            chrome.runtime.sendMessage(mooltipass.device._app.id, {'getInputs' : {'reqid': mooltipass.device.retrieveCredentialsQueue[0].reqid, 'domain': mooltipass.device.retrieveCredentialsQueue[0].domain, 'subdomain': mooltipass.device.retrieveCredentialsQueue[0].subdomain}});
         }
     }
     // Returned on a completed update of credentials on the device

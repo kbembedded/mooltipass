@@ -192,7 +192,9 @@ cipPassword.createIcon = function(field) {
 		mpDialog.toggle( e );
 
 		// Check if the current form has a combination associated to it
-		var associatedInput = mpJQ('#' + mpJQ(e.target).data('mp-genpw-field-id') );
+		var fieldID = mpJQ(e.target).data('mp-genpw-field-id');
+
+		var associatedInput = mpJQ('#' + fieldID + ',input[data-mp-id=' + fieldID + ']' );
 		var containerForm = associatedInput.closest('form');
 		var comb = false;
 
@@ -200,7 +202,7 @@ cipPassword.createIcon = function(field) {
 		if ( containerForm.length == 0 ) comb = mcCombs.forms.noform.combination;
 		else {
 			for (form in mcCombs.forms) {
-				if ( form === containerForm.prop('id') ) { // Match found
+				if ( form === containerForm.prop('id') || form === containerForm.data('mp-id') ) { // Match found
 					comb = mcCombs.forms[form].combination;
 				}
 			}
@@ -1803,6 +1805,12 @@ var mpDialog = {
 				cipPassword.generatePassword();
 			}
 
+			// Move dialog if exceeding right area
+			if ( posX + mpBox.outerWidth() > window.innerWidth ) {
+				mpBox.css({ left: posX - mpBox.outerWidth() - 50 + 'px' });
+				mpBox.addClass('inverted-triangle');
+			}
+
 			// Move dialog if exceeding bottom
 			var exceedingBottom = ( posY + mpBox.innerHeight() ) - mpJQ( window.top ).innerHeight();
 			if ( exceedingBottom > 0 ) mpBox.css({ top: mpBox.position().top - exceedingBottom + 'px' });
@@ -1819,6 +1827,7 @@ var mpDialog = {
 		this.shown = false;
 	},
 	domDialog: function( $pwField ) {
+		// DomDialog creates the dialog upon request (No dialog is created if the user doesn't click on the blue-key)
 		var output = document.createElement('div');
 		output.className = 'mooltipass-box';
 
@@ -1832,6 +1841,9 @@ var mpDialog = {
 		var oInput = mpJQ('<input>').prop('type','text').addClass('mooltipass-hash-ignore').prop('id','mooltipass-username');
 		mpJQ('<div>').addClass('login-area').addClass('mp-area').append(oTitle, oText, oInput).appendTo( output );
 
+		// Check if we retreived credentials
+		if ( mcCombs.credentialsCache && mcCombs.credentialsCache.length && mcCombs.credentialsCache[0].Login ) oInput.val( mcCombs.credentialsCache[0].Login );
+		
 		// Credentials Actions
 		oTitle = mpJQ('<div>').addClass('mp-title').text('Credential Storage');
 		oText = mpJQ('<p>').text('You can store your entered credentials in the Mooltipass device to securely store and easily access them.');
