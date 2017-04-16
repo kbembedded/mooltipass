@@ -64,6 +64,9 @@
  *  MINI_CLICK_BETATESTERS_SETUP
  *  => mini beta testing units with click scroll wheel, sent to the beta testers
  *
+ *  MINI_CREDENTIAL_MANAGEMENT
+ *  => mooltipass mini beta testing as above, on-board cred. mgmt. WARNING: Requires updated bundle.img for replacement graphics!
+ *
  *  MINI_PREPRODUCTION_SETUP_ACC
  *  => mooltipass mini pre-production units, with or without accelerometer
  *
@@ -72,10 +75,18 @@
  *
  *  MINI_KICKSTARTER_SETUP
  *  => mooltipass mini production kickstarter version (8Mb)
+ *
+ *  MINI_KICKSTARTER_SINGLE_BOOTSTRAP
+ *  => mooltipass mini, similar to MINI_KICKSTARTER_SETUP, enables setting UID and keys from USB for single production
+ *
+ *  MINI_PREPROD_KICKSTARTER_SETUP_HARDENED_CREDENTIAL_MANAGEMENT
+ *  => mooltipass mini hardened setup, on-board cred. mgmt. WARNING: Requires updated bundle.img for replacement graphics!
+ *
+ *  MINI_KICKSTARTER_SETUP_HARDENED_CREDENTIAL_MANAGEMENT
+ *  => mooltipass mini same as above but for pre-production kickstarter version (4 Mb instead of 8 Mb)
 */
+
 #define MINI_PREPROD_KICKSTARTER_SETUP_HARDENED_CREDENTIAL_MANAGEMENT
-//#define MINI_PREPRODUCTION_SETUP_ACC
-//#define POST_KICKSTARTER_UPDATE_SETUP
 
 #if defined(BETATESTERS_SETUP)
     #define FLASH_CHIP_4M
@@ -204,7 +215,6 @@
     #define HARDWARE_MINI_CLICK_V2
     #define DISABLE_USB_SET_UID_DEV_PASSWORD_COMMANDS
     #define KNOCK_SETTINGS_CHANGE_PREVENT_WHEN_CARD_INSERTED
-// Similar to above, enables setting UID and keys from USB HID for single production
 #elif defined(MINI_KICKSTARTER_SINGLE_BOOTSTRAP)
     #define MINI_KICKSTARTER_SETUP
     #define MINI_VERSION
