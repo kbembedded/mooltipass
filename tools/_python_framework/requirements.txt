@@ -4,3 +4,4 @@ intelhex
 pyqrcode
 viivakoodi
 pillow
+seccure
